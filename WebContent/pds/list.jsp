@@ -44,17 +44,15 @@
 	int pageSize=5; //한 페이지에 보여줄 레코드 개수
 	int blockSize=10; //블럭 사이즈 1~10, 11~20 => 10
 	int totalRecord=list.size(); //전체 레코드 개수, 예)17
-	int totalPage= (int)Math.ceil((float)totalRecord/pageSize);
-	//=> 전체 페이지 개수
 	
-	PagingVO pagevo = new PagingVO(currentPage, totalRecord, pageSize, blockSize);		
-	
-	int num = pagevo.getTotalRecord();
+	PagingVO pageVo 
+		= new PagingVO(currentPage, totalRecord, pageSize, blockSize);
+			
 %>
 <!DOCTYPE HTML>
 <html lang="ko">
 <head>
-<title>답변형 게시판 글 목록 - 허브몰</title>
+<title>자료실 글 목록 - 허브몰</title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="../css/mainstyle.css" />
 <link rel="stylesheet" type="text/css" href="../css/clear.css" />
@@ -69,13 +67,10 @@
 		padding:5px;
 		margin:5px;
 	 }	
-	 .del{
-	 	color: gray;
-	 }
 </style>	
 </head>	
 <body>
-<h2>답변형 게시판</h2>
+<h2>자료실</h2>
 <%if(keyword!=null && !keyword.isEmpty()){ %>
 	<p>검색어 : <%=keyword %>, <%=list.size() %>건 검색되었습니다.</p>
 <%}else{ 
@@ -84,8 +79,8 @@
 
 <div class="divList">
 <table class="box2"
-	 	summary="답변형 게시판에 관한 표로써, 번호, 제목, 작성자, 작성일, 조회수에 대한 정보를 제공합니다.">
-	<caption>답변형 게시판</caption>
+	 	summary="자료실에 관한 표로써, 번호, 제목, 작성자, 작성일, 조회수에 대한 정보를 제공합니다.">
+	<caption>자료실</caption>
 	<colgroup>
 		<col style="width:10%;" />
 		<col style="width:50%;" />
@@ -108,32 +103,35 @@
 				<td colspan="5" class="align_center">
 					게시판 글이 존재하지 않습니다.</td>
 			</tr>			
-		<%}else{ %>  
+		<%}else{%>  
 		  	<!--게시판 내용 반복문 시작  -->
-		  	<%for(int i=0;i<pagevo.getPageSize();i++){
+		  	
+		  	<%
+		  	int num=pageVo.getNum();
+		  	int curPos=pageVo.getCurPos();
+		  	
+		  	for(int i=0;i<pageVo.getPageSize();i++){
 		  		if(num-- < 1) break;
-		  		int curPos = pagevo.getCurPos();
+		  		
 		  		ReBoardVO vo = list.get(curPos++);
 		  	%>		
 				<tr class="align_center">
 					<td><%=vo.getNo() %></td>
 					<td class="align_left">
-						<!-- 답변글인 경우 re이미지 보여주기 -->
-						<%= Utility.displayRe(vo.getStep())%>
-						
-						<!-- 삭제된 글 처리 -->
-						<%if(vo.getDelflag().equals("N")){%>
-						
-							<!-- 제목이 긴 경우 일부만 보여주기 -->
+						<%if(vo.getDelFlag().equals("Y")){ %>
+							<span style="color:gray">
+								삭제된 글입니다.</span>
+						<%}else{ %>
+							<!-- 답변글인 경우 re이미지 보여주기 -->
+							<%=Utility.displayRe(vo.getStep()) %>
+							
+							<!-- 제목이 긴 경우 일부만 보여주기 -->						
 							<a href="countUpdate.jsp?no=<%=vo.getNo()%>">
-							<%= Utility.cutString(vo.getTitle(),25)%></a>
-							
+								<%=Utility.cutString(vo.getTitle(), 30) %>
+							</a>
 							<!-- 24시간 이내의 글인 경우 new이미지 보여주기 -->
-							<%=Utility.displayNew(vo.getRegdate(), 24) %>
-							
-						<%}else{%>
-							<span class="del">삭제된 글입니다.</span>
-						<%}%>
+							<%=Utility.displayNew(vo.getRegdate(),24) %>
+						<%}//if %>	
 					</td>
 					<td><%=vo.getName() %></td>
 					<td><%=sdf.format(vo.getRegdate()) %></td>
@@ -148,15 +146,15 @@
 <div class="divPage">
 	<!-- 페이지 번호 추가 -->		
 	<!-- 이전 블럭으로 이동 ◀ -->
-	<%if(pagevo.getFirstPage()>1){ %>
-		<a href="list.jsp?currentPage=<%=pagevo.getFirstPage()-1%>">
+	<%if(pageVo.getFirstPage()>1){ %>
+		<a href="list.jsp?currentPage=<%=pageVo.getFirstPage()-1%>">
 			<img src="../images/first.JPG" alt="이전 블럭으로 이동">
 		</a>
 	<%} %>
 	
 	<!-- [1][2][3][4][5][6][7][8][9][10] -->
-	<%for(int i=pagevo.getFirstPage();i<=pagevo.getLastPage();i++){ 
-		if(i > totalPage) break;
+	<%for(int i=pageVo.getFirstPage();i<=pageVo.getLastPage();i++){ 
+		if(i > pageVo.getTotalPage()) break;
 	%>
 		<%if(i!=currentPage){%>
 			<a href="list.jsp?currentPage=<%=i%>">[<%=i %>]</a>
@@ -166,8 +164,8 @@
 	<%}//for %>	
 	
 	<!-- 다음 블럭으로 이동 ▶ -->
-	<%if(pagevo.getLastPage() < pagevo.getTotalPage()){ %>
-		<a href="list.jsp?currentPage=<%=pagevo.getLastPage()+1%>">
+	<%if(pageVo.getLastPage() < pageVo.getTotalPage()){ %>
+		<a href="list.jsp?currentPage=<%=pageVo.getLastPage()+1%>">
 			<img src="../images/last.JPG" alt="다음 블럭으로 이동">
 		</a>
 	<%} %>

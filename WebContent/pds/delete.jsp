@@ -2,7 +2,7 @@
     pageEncoding="utf-8"%>
 <%
 	//detail.jsp에서 삭제 클릭하면 get방식으로 이동
-	//=> http://localhost:9090/herbmall/reBoard/delete.jsp?no=1&groupNo=1&step=0
+	//=> http://localhost:9090/herbmall/reBoard/delete.jsp?no=11&step=0&groupNo=11
 	//1
 	String no=request.getParameter("no");
 	if(no==null || no.isEmpty()){ %>
@@ -14,15 +14,15 @@
 	<%	return;	
 	}
 	
-	String groupNo = request.getParameter("groupNo");
-	String step = request.getParameter("step");
+	String step=request.getParameter("step");
+	String groupNo=request.getParameter("groupNo");
 	
 %>    
 <!DOCTYPE HTML>
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>답변형 게시판 글 삭제 - 허브몰</title>
+<title>자료실 글 삭제 - 허브몰</title>
 <link rel="stylesheet" type="text/css" href="../css/mainstyle.css" />
 <link rel="stylesheet" type="text/css" href="../css/clear.css" />
 <link rel="stylesheet" type="text/css" href="../css/formLayout.css" />
@@ -64,9 +64,9 @@
 <div class="divForm">
 <form name="frmDelete" method="post"	action="delete_ok.jsp" >
 	<!-- 삭제시 필요하므로 no를 hidden필드에 넣어준다 -->
-	<input type="hidden" name="no" value="<%=no%>">
-	<input type="hidden" name="groupNo" value="<%=groupNo%>">
-	<input type="hidden" name="step" value="<%=step%>">
+	<input type="text" name="no" value="<%=no%>">
+	<input type="text" name="step" value="<%=step%>">
+	<input type="text" name="groupNo" value="<%=groupNo%>">
 	
 		<fieldset>
 		<legend>글 삭제</legend>

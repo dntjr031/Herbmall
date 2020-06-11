@@ -39,7 +39,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<title>답변형 게시판 상세보기 - 허브몰</title>
+<title>자료실 상세보기 - 허브몰</title>
 <link rel="stylesheet" type="text/css" href="../css/mainstyle.css" />
 <link rel="stylesheet" type="text/css" href="../css/clear.css" />
 <link rel="stylesheet" type="text/css" href="../css/formLayout.css" />
@@ -72,10 +72,11 @@
 		<div class="lastDiv">			
 			<p class="content"><%=content %></p>
 		</div>
-		<div class="center">
+		<div class="center">		
 			<a href='edit.jsp?no=<%=no%>'>수정</a> |
-        	<a href='delete.jsp?no=<%=no%>&step=<%=vo.getStep()%>&groupNo=<%=vo.getGroupNo()%>'>
-        	삭제</a> |
+        	<a href
+='delete.jsp?no=<%=no%>&step=<%=vo.getStep()%>&groupNo=<%=vo.getGroupNo()%>'>
+        		삭제</a> |
         	<a href='reply.jsp?no=<%=no%>'>답변</a> |
         	<a href='list.jsp'>목록</a>			
 		</div>

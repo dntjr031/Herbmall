@@ -11,10 +11,10 @@ import java.util.List;
 
 import com.herbmall.db.ConnectionPoolMgr;
 
-public class ReBoardDAO {
+public class ReBoardDAO_BAK {
 	private ConnectionPoolMgr pool;
 	
-	public ReBoardDAO() {
+	public ReBoardDAO_BAK() {
 		pool=new ConnectionPoolMgr();
 	}
 	
@@ -34,8 +34,8 @@ public class ReBoardDAO {
 			
 			//3
 			String sql="insert into reBoard(no, name, pwd, title, "
-					+ " email, content, groupno, filename, filesize, originalFileName)" + 
-					" values(reBoard_seq.nextval, ?,?,?,?,?, reBoard_seq.nextval,?,?,?)";
+					+ " email, content, groupno)" + 
+					" values(reBoard_seq.nextval, ?,?,?,?,?, reBoard_seq.nextval)";
 			ps=con.prepareStatement(sql);
 			
 			ps.setString(1, vo.getName());
@@ -43,10 +43,6 @@ public class ReBoardDAO {
 			ps.setString(3, vo.getTitle());
 			ps.setString(4, vo.getEmail());
 			ps.setString(5, vo.getContent());
-			
-			ps.setString(6, vo.getFileName());
-			ps.setLong(7, vo.getFileSize());
-			ps.setString(8, vo.getOriginalFileName());
 			
 			int cnt=ps.executeUpdate();
 			System.out.println("글 등록 결과, cnt="+cnt+", 매개변수 vo="+vo);
@@ -113,15 +109,9 @@ public class ReBoardDAO {
 				int sortno=rs.getInt("sortNo");
 				String delFlag=rs.getString("delflag");
 				
-				String fileName=rs.getString("fileName");
-				String originalFileName=rs.getString("originalFileName");
-				int downcount=rs.getInt("downcount");
-				long fileSize=rs.getInt("fileSize");
-				
 				ReBoardVO vo = new ReBoardVO(no, name, pwd, title, 
 						email, regdate, readcount, content, 
-						groupno, step, sortno, delFlag, fileName, 
-						fileSize, downcount, originalFileName);
+						groupno, step, sortno, delFlag);
 				
 				list.add(vo);
 			}
@@ -174,11 +164,6 @@ public class ReBoardDAO {
 				int sortno=rs.getInt("sortNo");
 				String delFlag=rs.getString("delflag");
 				
-				String fileName=rs.getString("fileName");
-				String originalFileName=rs.getString("originalFileName");
-				int downcount=rs.getInt("downcount");
-				long fileSize=rs.getInt("fileSize");
-				
 				vo.setContent(content);
 				vo.setEmail(email);
 				vo.setName(name);
@@ -192,11 +177,6 @@ public class ReBoardDAO {
 				vo.setStep(step);
 				vo.setSortNo(sortno);
 				vo.setDelFlag(delFlag);
-				
-				vo.setFileName(fileName);
-				vo.setFileSize(fileSize);
-				vo.setOriginalFileName(originalFileName);
-				vo.setDownCount(downcount);
 			}
 			
 			System.out.println("글 상세보기 결과, vo="+vo+", 매개변수no="+no);

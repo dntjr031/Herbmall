@@ -14,10 +14,10 @@
 	//1
 	request.setCharacterEncoding("utf-8");
 
-	String pwd = request.getParameter("pwd");
-	String no = request.getParameter("no");
-	String groupNo = request.getParameter("groupNo");
-	String step = request.getParameter("step");
+	String pwd=request.getParameter("pwd");
+	String no=request.getParameter("no");
+	String step=request.getParameter("step");
+	String groupNo=request.getParameter("groupNo");
 	
 	//2
 	ReBoardDAO dao = new ReBoardDAO();
@@ -26,34 +26,26 @@
 	vo.setGroupNo(Integer.parseInt(groupNo));
 	vo.setStep(Integer.parseInt(step));
 	
-	
 	try{
 		if(dao.checkPwd(Integer.parseInt(no), pwd)){
-			dao.deleteReBoard(vo);	
-			%>
+			dao.deleteReBoard(vo);%>
 			<script type="text/javascript">
 				alert('글 삭제되었습니다.');
 				location.href="list.jsp";
-			</script>	
-			<%
-		}else{
-			%>
+			</script>
+		<%}else{%>
 			<script type="text/javascript">
 				alert("비밀번호가 일치하지 않습니다.");
 				history.back();
-			</script>
-			<%
-		}
-		
+			</script>	
+	<%	}
 	}catch(SQLException e){
-		e.printStackTrace();
-		%>
+		e.printStackTrace();%>
 		<script type="text/javascript">
 			alert('글 삭제 실패!');
 			history.go(-1);
 		</script>
-		<%
-	}
-%>
+	<%} %>
+	
 </body>
 </html>

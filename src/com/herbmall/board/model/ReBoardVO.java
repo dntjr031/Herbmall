@@ -14,16 +14,22 @@ public class ReBoardVO {
 	
 	//답변형 게시판 추가
 	private int groupNo;
-	private int step;
+	private int step; 
 	private int sortNo;
 	private String delFlag;
 	
+	//자료실
+	private String fileName;
+    private long fileSize; 
+    private int downCount;
+    private String originalFileName;
+    
 	public ReBoardVO() {
 		super();
 	}
 
 	public ReBoardVO(int no, String name, String pwd, String title, String email, Timestamp regdate, int readcount,
-			String content, int groupNo, int step, int sortNo, String delflag) {
+			String content, int groupNo, int step, int sortNo, String delFlag) {
 		super();
 		this.no = no;
 		this.name = name;
@@ -36,7 +42,29 @@ public class ReBoardVO {
 		this.groupNo = groupNo;
 		this.step = step;
 		this.sortNo = sortNo;
-		this.delFlag = delflag;
+		this.delFlag = delFlag;
+	}
+		
+	public ReBoardVO(int no, String name, String pwd, String title, String email, Timestamp regdate, int readcount,
+			String content, int groupNo, int step, int sortNo, String delFlag, String fileName, long fileSize,
+			int downCount, String originalFileName) {
+		super();
+		this.no = no;
+		this.name = name;
+		this.pwd = pwd;
+		this.title = title;
+		this.email = email;
+		this.regdate = regdate;
+		this.readcount = readcount;
+		this.content = content;
+		this.groupNo = groupNo;
+		this.step = step;
+		this.sortNo = sortNo;
+		this.delFlag = delFlag;
+		this.fileName = fileName;
+		this.fileSize = fileSize;
+		this.downCount = downCount;
+		this.originalFileName = originalFileName;
 	}
 
 	public int getNo() {
@@ -102,7 +130,7 @@ public class ReBoardVO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	
 	public int getGroupNo() {
 		return groupNo;
 	}
@@ -127,19 +155,54 @@ public class ReBoardVO {
 		this.sortNo = sortNo;
 	}
 
-	public String getDelflag() {
+	public String getDelFlag() {
 		return delFlag;
 	}
 
-	public void setDelflag(String delflag) {
-		this.delFlag = delflag;
+	public void setDelFlag(String delFlag) {
+		this.delFlag = delFlag;
+	}
+	
+	public String getFileName() {
+		return fileName;
+	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public long getFileSize() {
+		return fileSize;
+	}
+
+	public void setFileSize(long fileSize) {
+		this.fileSize = fileSize;
+	}
+
+	public int getDownCount() {
+		return downCount;
+	}
+
+	public void setDownCount(int downCount) {
+		this.downCount = downCount;
+	}
+
+	public String getOriginalFileName() {
+		return originalFileName;
+	}
+
+	public void setOriginalFileName(String originalFileName) {
+		this.originalFileName = originalFileName;
 	}
 
 	@Override
 	public String toString() {
 		return "ReBoardVO [no=" + no + ", name=" + name + ", pwd=" + pwd + ", title=" + title + ", email=" + email
 				+ ", regdate=" + regdate + ", readcount=" + readcount + ", content=" + content + ", groupNo=" + groupNo
-				+ ", step=" + step + ", sortNo=" + sortNo + ", delflag=" + delFlag + "]";
+				+ ", step=" + step + ", sortNo=" + sortNo + ", delFlag=" + delFlag + ", fileName=" + fileName
+				+ ", fileSize=" + fileSize + ", downCount=" + downCount + ", originalFileName=" + originalFileName
+				+ "]";
 	}
-
+	
+	
 }
