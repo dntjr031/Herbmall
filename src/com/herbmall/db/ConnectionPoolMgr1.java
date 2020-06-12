@@ -124,21 +124,16 @@ public class ConnectionPoolMgr1 {
 	
 	
 	//자원해제하는 메서드
-	public void dbClose(PreparedStatement ps,  Connection con) throws SQLException{
+	public void dbClose(Connection con, PreparedStatement ps) throws SQLException{
 		if(ps!=null) ps.close();
 		if(con!=null)returnConnection(con);
 	}
 	
-	public void dbClose(ResultSet rs,  PreparedStatement ps,  
-			Connection con) throws SQLException{
+	public void dbClose(Connection con,  PreparedStatement ps,  
+			ResultSet rs) throws SQLException{
 		if(rs!=null)rs.close();
 		if(ps!=null) ps.close();
 		if(con!=null)returnConnection(con);				
-	}
-	
-	public void dbClose(CallableStatement cs,  Connection con) throws SQLException{
-		if(cs!=null) cs.close();
-		if(con!=null)returnConnection(con);			
 	}
 	
 	//컨넥션풀 객체를 하나만 생성하는 메서드

@@ -56,19 +56,21 @@
             <label for="pwd">비밀번호</label>
             <input type="password" id="pwd" name="pwd" />
         </div>
+        
         <div>
             <label for="email">이메일</label>
             <input type="text" id="email" name="email" />
-        </div>
-        <div>  
-        	<label for="content">내용</label>        
- 			<textarea id="content" name="content" rows="12" cols="40"></textarea>
         </div>
         <div>
             <label for="upfile">첨부파일</label>
             <input type="file" id="upfile" name="upfile" />
             <span>(최대 2M)</span>
-        </div>        
+        </div>  
+        <div>  
+        	<label for="content">내용</label>        
+ 			<textarea id="content" name="content" rows="12" cols="40"></textarea>
+        </div>
+              
         <div class="center">
             <input type = "submit" value="등록"/>
             <input type = "Button" class="btList" value="글목록"  />         

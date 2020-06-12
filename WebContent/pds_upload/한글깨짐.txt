@@ -1,0 +1,14 @@
+실행단추의 Run Configurations…
+
+VM arguments에 아래 문장 입력
+
+-Dfile.encoding=MS949
+
+Apply를 누르고, Run 단추를 누르면 OK!
+
+each에서의 this는 선택된 요소들 하나하나
+event에서의 this는 이벤트가 발생한 개체
+
+event.preventDefault(); -- 이벤트 진행을 막는다
+
+DESKTOP-Q8AMKFB

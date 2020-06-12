@@ -16,6 +16,7 @@
 	
 	String step=request.getParameter("step");
 	String groupNo=request.getParameter("groupNo");
+	String fileName = request.getParameter("fileName");
 	
 %>    
 <!DOCTYPE HTML>
@@ -67,6 +68,7 @@
 	<input type="text" name="no" value="<%=no%>">
 	<input type="text" name="step" value="<%=step%>">
 	<input type="text" name="groupNo" value="<%=groupNo%>">
+	<input type="text" name="fileName" value="<%=fileName%>">
 	
 		<fieldset>
 		<legend>글 삭제</legend>

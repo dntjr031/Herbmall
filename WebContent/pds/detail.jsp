@@ -1,3 +1,4 @@
+<%@page import="com.herbmall.common.Utility"%>
 <%@page import="com.herbmall.board.model.ReBoardVO"%>
 <%@page import="com.herbmall.board.model.ReBoardDAO"%>
 <%@page import="java.sql.SQLException"%>
@@ -34,6 +35,18 @@
 	}else{
 		content="";
 	}
+	
+	//파일이 첨부된 경우 파일정보와 다운로드 수 출력
+	String fileInfo = "", downInfo="";
+	String fileName = vo.getFileName();
+	
+	if(fileName != null && !fileName.isEmpty()){
+		fileInfo = Utility.getFileInfo(vo.getOriginalFileName(), vo.getFileSize());
+		
+		downInfo = "다운 : " + vo.getDownCount();
+	}else{
+		fileName = "";
+	}
 %>    
 <!DOCTYPE HTML>
 <html lang="ko">
@@ -69,19 +82,24 @@
 		<div>
 			<span class="sp1">조회수</span> <span><%=vo.getReadcount() %></span>
 		</div>
+		<div>
+			<span class="sp1">첨부화일</span> 
+			<span>
+				<a href="down.jsp?fileName=<%=fileName%>&no=<%=no%>"><%=fileInfo %></a>
+				&ensp;<%=downInfo %>
+			</span>
+		</div>
 		<div class="lastDiv">			
 			<p class="content"><%=content %></p>
 		</div>
 		<div class="center">		
 			<a href='edit.jsp?no=<%=no%>'>수정</a> |
         	<a href
-='delete.jsp?no=<%=no%>&step=<%=vo.getStep()%>&groupNo=<%=vo.getGroupNo()%>'>
+='delete.jsp?no=<%=no%>&step=<%=vo.getStep()%>&groupNo=<%=vo.getGroupNo()%>&fileName=<%=fileName%>'>
         		삭제</a> |
         	<a href='reply.jsp?no=<%=no%>'>답변</a> |
         	<a href='list.jsp'>목록</a>			
 		</div>
 	</div>
-
-	
 </body>
 </html>

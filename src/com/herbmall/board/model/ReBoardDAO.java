@@ -10,12 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.herbmall.db.ConnectionPoolMgr;
+import com.herbmall.db.ConnectionPoolMgr1;
 
 public class ReBoardDAO {
-	private ConnectionPoolMgr pool;
+	private ConnectionPoolMgr1 pool;
 	
 	public ReBoardDAO() {
-		pool=new ConnectionPoolMgr();
+		pool=ConnectionPoolMgr1.getInstance();
 	}
 	
 	/**
@@ -53,7 +54,7 @@ public class ReBoardDAO {
 			
 			return cnt;
 		}finally {
-			pool.dbClose(con, ps);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -132,7 +133,7 @@ public class ReBoardDAO {
 			
 			return list;
 		}finally {
-			pool.dbClose(con, ps, rs);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -203,7 +204,7 @@ public class ReBoardDAO {
 			
 			return vo;
 		}finally{
-			pool.dbClose(con, ps, rs);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -222,24 +223,39 @@ public class ReBoardDAO {
 			con=pool.getConnection();
 			
 			//3
-			String sql="update reBoard" + 
-					" set name=?,title=?,email=?,content=?" + 
-					" where no=? and pwd=?";
+			String sql="update reBoard";
+			sql += " set name=?,title=?,email=?,content=?";
+			
+			if(vo.getFileName() != null && !vo.getFileName().isEmpty()) {
+				sql +=",filename=?,filesize=?,ORIGINALFILENAME=?";
+			}
+			
+			sql += " where no=?";
+			
 			ps=con.prepareStatement(sql);
 			
 			ps.setString(1, vo.getName());
 			ps.setString(2, vo.getTitle());
 			ps.setString(3, vo.getEmail());
 			ps.setString(4, vo.getContent());
-			ps.setInt(5, vo.getNo());
-			ps.setString(6, vo.getPwd());
+			
+			//파일이 새로 첨부된 경우
+			if(vo.getFileName() != null && !vo.getFileName().isEmpty()) {
+				ps.setString(5, vo.getFileName());
+				ps.setLong(6, vo.getFileSize());
+				ps.setString(7, vo.getOriginalFileName());
+				ps.setInt(8, vo.getNo());
+			}else { //첨부되지 않은 경우
+				ps.setInt(5, vo.getNo());
+			}
+			
 			
 			int cnt=ps.executeUpdate();
 			System.out.println("글 수정 결과, cnt="+cnt+", 매개변수 vo="+vo);
 			
 			return cnt;
 		}finally {
-			pool.dbClose(con, ps);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -262,7 +278,7 @@ public class ReBoardDAO {
 			
 			return cnt;
 		}finally {
-			pool.dbClose(con, ps);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -286,7 +302,7 @@ public class ReBoardDAO {
 			ps.executeUpdate();
 			System.out.println("글 삭제  매개변수 vo="+vo);			
 		}finally {
-			pool.dbClose(con, ps);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -321,7 +337,7 @@ public class ReBoardDAO {
 			
 			return result;
 		}finally {
-			pool.dbClose(con, ps, rs);
+			pool.returnConnection(con);
 		}
 	}
 	
@@ -378,10 +394,34 @@ public class ReBoardDAO {
 			//다시 자동 커밋되도록 설정
 			con.setAutoCommit(true);
 			
-			pool.dbClose(con, ps);
+			pool.returnConnection(con);
 		}
 		
 		return cnt;
+	}
+	
+	public int updateDownCount(int no) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		try {
+			con = pool.getConnection();
+			
+			String sql = "update reboard" + 
+					" set downcount = downcount + 1" + 
+					" where no = ?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setInt(1, no);
+			
+			int cnt = ps.executeUpdate();
+			
+			System.out.println("다운로드 수 증가 cnt=" + cnt + ", 매개변수 no="+no);
+			return cnt;
+			
+		} finally {
+			pool.returnConnection(con);
+		}
 	}
 	
 }

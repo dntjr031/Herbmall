@@ -60,7 +60,13 @@
 <link rel="stylesheet" type="text/css" href="../css/mystyle.css" />
 <script type="text/javascript" src="../js/jquery-3.5.1.min.js"></script>
 <script type="text/javascript">	
-
+	$(function() {
+		$("tbody tr").hover(function() {
+			$(this).css("background","skyblue");
+		}, function() {
+			$(this).css("background","");
+		});
+	});
 </script>
 <style type="text/css">
 	body{
@@ -114,6 +120,7 @@
 		  		if(num-- < 1) break;
 		  		
 		  		ReBoardVO vo = list.get(curPos++);
+		  		
 		  	%>		
 				<tr class="align_center">
 					<td><%=vo.getNo() %></td>
@@ -124,6 +131,9 @@
 						<%}else{ %>
 							<!-- 답변글인 경우 re이미지 보여주기 -->
 							<%=Utility.displayRe(vo.getStep()) %>
+							
+							<!-- 파일이 첨부된 경우 이미지 보여주기 -->
+							<%=Utility.displayFile(vo.getFileName()) %>
 							
 							<!-- 제목이 긴 경우 일부만 보여주기 -->						
 							<a href="countUpdate.jsp?no=<%=vo.getNo()%>">

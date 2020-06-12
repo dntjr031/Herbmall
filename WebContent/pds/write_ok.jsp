@@ -1,3 +1,4 @@
+<%@page import="com.herbmall.common.Utility"%>
 <%@page import="java.io.File"%>
 <%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
 <%@page import="com.oreilly.servlet.MultipartRequest"%>
@@ -17,14 +18,13 @@
 <%
 	//write.jsp에서 post방식으로 서브밋
 	//1.
-	String upPath="pds_upload";
+	String upPath=Utility.UP_PATH;
 	String saveDir=application.getRealPath(upPath);
 	saveDir=config.getServletContext().getRealPath(upPath);
 	System.out.println("saveDir="+saveDir);
 	
 	//test경로
-	saveDir
-="C:\\Users\\STU-03\\Documents\\lecture\\java\\workspace_list\\jsp_ws\\Herbmall\\WebContent\\pds_upload";
+	saveDir= Utility.TEST_PATH;
 	System.out.println("test 경로 ="+saveDir);
 
 	int maxSize=2*1024*1024;  //2M
@@ -66,6 +66,9 @@
 		vo.setName(name);
 		vo.setPwd(pwd);
 		vo.setTitle(title);
+		vo.setFileName(fileName);
+		vo.setFileSize(fileSize);
+		vo.setOriginalFileName(originName);
 		
 		int cnt = 0;
 	

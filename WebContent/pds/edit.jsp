@@ -1,3 +1,4 @@
+<%@page import="com.herbmall.common.Utility"%>
 <%@page import="java.sql.SQLException"%>
 <%@page import="com.herbmall.board.model.ReBoardVO"%>
 <%@page import="com.herbmall.board.model.ReBoardDAO"%>
@@ -31,6 +32,11 @@
 	if(email==null) email="";
 	if(content==null) content="";
 	
+	String oldFileName = vo.getFileName();
+	if(oldFileName == null || oldFileName.isEmpty()){
+		oldFileName = "";
+	}
+	
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -44,36 +50,63 @@
 <script type="text/javascript" src="../js/jquery-3.5.1.min.js"></script>
 
 <script type="text/javascript">
-
+	$(function() {
+		$("form[name=frmEdit]").submit(function() {
+			$(".infobox").each(function() {
+				if($(this).val()==''){
+					alert($(this).prev().text() + '을 입력하세요');
+					$(this).focus();
+					event.preventDefault();
+					return false; //each문 탈출
+				}
+			});
+		});
+	});
 </script>
 
 </head>
 <body>
 <div class="divForm">
-<form name="frmEdit" method="post" action="edit_ok.jsp">
+<form name="frmEdit" method="post" action="edit_ok.jsp" enctype="multipart/form-data">
 	<!-- 수정시 no 가 필요하므로  hidden 필드에 담아서 보낸다 -->
 	<input type="hidden" name="no" value="<%=no%>">
+	<input type="text" name="oldFileName" value="<%=oldFileName%>">
 	 
     <fieldset>
 	<legend>글수정</legend>
         <div class="firstDiv">
             <label for="title">제목</label>
             <input type="text" id="title" name="title" 
-            	value="<%=vo.getTitle() %>" />
+            	value="<%=vo.getTitle() %>" class="infobox"/>
         </div>
         <div>
             <label for="name">작성자</label>
             <input type="text" id="name" name="name" 
-            	value="<%=vo.getName() %>"/>
+            	value="<%=vo.getName() %>" class="infobox"/>
         </div>
         <div>
             <label for="pwd">비밀번호</label>
-            <input type="password" id="pwd" name="pwd" />
+            <input type="password" id="pwd" name="pwd" class="infobox"/>
         </div>
         <div>
             <label for="email">이메일</label>
             <input type="text" id="email" name="email" 
             	value="<%=email %>"/>
+        </div>
+        <div>
+            <label for="upfile">첨부파일</label>
+            <input type="file" id="upfile" name="upfile" />
+            <span>(최대 2M)</span>
+        </div>
+        <div>
+            <span class="sp1">첨부파일목록</span>
+            <%if(oldFileName!=null && !oldFileName.isEmpty()){%>
+            	<span>
+            	<%=Utility.getFileInfo(vo.getOriginalFileName(), vo.getFileSize()) %>
+            	</span><br>
+            	<span style="color: green; font-weight: bold;">
+            	첨부파일을 새로 지정할 경우 기존 파일은 삭제됩니다.</span>
+           <%}%>
         </div>
         <div>  
         	<label for="content">내용</label>        
