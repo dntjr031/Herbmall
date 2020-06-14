@@ -122,7 +122,7 @@
 						<%= Utility.displayRe(vo.getStep())%>
 						
 						<!-- 삭제된 글 처리 -->
-						<%if(vo.getDelflag().equals("N")){%>
+						<%if(vo.getDelFlag().equals("N")){%>
 						
 							<!-- 제목이 긴 경우 일부만 보여주기 -->
 							<a href="countUpdate.jsp?no=<%=vo.getNo()%>">
