@@ -1,5 +1,5 @@
-<%@page import="com.herbmall.common.PagingVO"%>
-<%@page import="com.herbmall.common.Utility"%>
+<%@page import="com.bookweb.common.PagingVO"%>
+<%@page import="com.bookweb.common.Utility"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.herbmall.board.model.ReBoardVO"%>
 <%@page import="java.util.List"%>
