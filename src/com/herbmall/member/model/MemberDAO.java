@@ -2,6 +2,7 @@ package com.herbmall.member.model;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.herbmall.db.ConnectionPoolMgr2;
@@ -40,6 +41,39 @@ public class MemberDAO {
 			return cnt;
 		} finally {
 			pool.dbClose(con, ps);
+		}
+	}
+	
+	public int duplicateId(String userid) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		int result = 0;
+		try {
+			con = pool.getConnection();
+			
+			String sql = "select count(*) from member where userid=?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, userid);
+			
+			rs = ps.executeQuery();
+			if(rs.next()) {
+				int count = rs.getInt(1);
+				if(count > 0) { //해당 아이디가 이미존재
+					result = MemberService.EXIST_ID;
+				}else {
+					result = MemberService.NON_EXIST_ID;
+				}
+			}
+			
+			System.out.println("아이디 중복확인 결과 result=" + result);
+			
+			return result;
+			
+		}finally {
+			pool.dbClose(con, ps, rs);;
 		}
 	}
 }
