@@ -76,4 +76,74 @@ public class MemberDAO {
 			pool.dbClose(con, ps, rs);;
 		}
 	}
+	
+	public int loginCheck(String userid, String pwd) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			con = pool.getConnection();
+			
+			String sql = "select pwd from member where userid = ?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, userid);
+			
+			rs = ps.executeQuery();
+			int result = 0;
+			if(rs.next()) {
+				String userpwd = rs.getString(1);
+				if(userpwd.equals(pwd)) {
+					result = MemberService.LOGIN_OK;
+				}else {
+					result = MemberService.PWD_DISAGREE;
+				}
+			}else {
+				result = MemberService.ID_NONE;
+			}
+			System.out.println("로그인 처리결과 result="+result +", 매개변수 userid="+userid
+					+ ", pwd=" + "pwd");
+			return result;
+		} finally {
+			pool.dbClose(con, ps, rs);
+		}
+	}
+	
+	public MemberVO selectMember(String userid) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try {
+			con = pool.getConnection();
+			
+			String sql = "select * from member where userid = ?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, userid);
+			
+			rs = ps.executeQuery();
+			
+			MemberVO vo = new MemberVO();
+			while (rs.next()) {
+				vo.setAddress(rs.getString("address"));
+				vo.setAddressDetail(rs.getString("addressdetail"));
+				vo.setEmail(rs.getString("email"));
+				vo.setHp(rs.getString("hp"));
+				vo.setMileage(rs.getInt("mileage"));
+				vo.setName(rs.getString("name"));
+				vo.setNo(rs.getInt("no"));
+				vo.setOutdate(rs.getTimestamp("outdate"));
+				vo.setPwd(rs.getString("pwd"));
+				vo.setRegdate(rs.getTimestamp("regdate"));
+				vo.setUserid(rs.getString("userid"));
+				vo.setZipcode(rs.getString("zipcode"));
+			}
+			
+			System.out.println("조회 결과 vo=" + vo + ", 매개변수 userid=" + userid);
+			return vo;
+		} finally {
+			pool.dbClose(con, ps, rs);
+		}
+	}
 }

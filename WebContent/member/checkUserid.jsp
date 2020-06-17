@@ -35,7 +35,7 @@
 		$("input[type=button]").click(function() {
 			$(opener.document).find("#userid").val("<%=userid%>");
 			$(opener.document).find("#chkId").val("Y");
-			$(opener.document).find("#userid").attr("disabled","disabled");
+			$(opener.document).find("#userid").attr("readonly","readonly");
 			self.close();
 		});
 		

@@ -1,7 +1,51 @@
+<%@page import="java.sql.SQLException"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../inc/top.jsp" %>
-
+<jsp:useBean id="memVo" class="com.herbmall.member.model.MemberVO" scope="page"></jsp:useBean>
+<jsp:useBean id="memDAO" class="com.herbmall.member.model.MemberDAO" scope="session"></jsp:useBean>
+<%
+	// top.jsp 에서 회원정보수정을 누르면 get방식으로 이동 
+	// => http://localhost:9090/Herbmall/member/memberEdit.jsp
+	String c_userid = (String)session.getAttribute("userid");
+	String c_userName = (String)session.getAttribute("userName");
+	
+	try{
+		memVo = memDAO.selectMember(c_userid);
+	}catch(SQLException e){
+		e.printStackTrace();
+	}
+	
+	String address = memVo.getAddress();
+	String addressDetail = memVo.getAddressDetail();
+	String zipcode = memVo.getZipcode();
+	String hp = memVo.getHp();
+	String hp1 = "";
+	String hp2 = "";
+	String hp3 = "";
+	String email = memVo.getEmail();
+	String email1 = "";
+	String email2 = "";
+	
+	if(address==null||address.isEmpty()){
+		address = "";
+	}
+	if(addressDetail==null||addressDetail.isEmpty()){
+		addressDetail = "";
+	}
+	if(zipcode==null||zipcode.isEmpty()){
+		zipcode = "";
+	}
+	if(hp!=null&&!hp.isEmpty()){
+		hp1 = hp.substring(0, hp.indexOf("-"));
+		hp2 = hp.substring(hp.indexOf("-")+1, hp.lastIndexOf("-"));
+		hp3 = hp.substring(hp.lastIndexOf("-")+1);
+	}
+	if(email!=null&&!email.isEmpty()){
+		email1 = email.substring(0, email.indexOf("@"));
+		email2 = email.substring(email.indexOf("@")+1);
+	}
+%>
 <script type="text/javascript">
 	$(function() {
 		$("#wr_submit").click(function() {
@@ -50,16 +94,30 @@
 			    });
 		});
 		
-		$("#btnChkId").click(function() {
-			var userid = $("#userid").val();
-			var url = "checkUserid.jsp?userid=" + userid;
-            window.open(url, " _blank", "width=500,height=200,left=400,top=300,location=yes,resizable=yes"); 
-		});
-		
 		$("#btnZipcode").click(function() {
 			var url = "<%=request.getContextPath()%>/zipcode/zipcode.jsp";
             window.open(url, " _blank", "width=600,height=400,left=400,top=300,location=yes,resizable=yes"); 
 		});
+		
+		if('<%=hp%>' != ""){
+			$("#hp1 option").each(function() {
+				if($(this).text() == '<%=hp1%>'){
+					$(this).attr("selected","selected");
+				}
+			});
+		}
+		
+		if('<%=email%>' != ""){
+			$("#email2 option").each(function() {
+				if($(this).text() == '<%=email2%>'){
+					$(this).attr("selected","selected");
+				}else{
+					$("option[value=etc]").attr("selected","selected");
+					$("#email3").css("visibility","visible");
+					$("#email3").val('<%=email2%>');
+				}
+			});
+		}
 	});
 	
 	function validate_userid(id) {
@@ -95,16 +153,14 @@
 <div class="divForm">
 <form name="frm1" method="post" action="register_ok.jsp">
 <fieldset>
-	<legend>회원 가입</legend>
+	<legend>회원 정보 수정</legend>
     <div>        
         <label for="name">성명</label>
-        <input type="text" name="name" id="name" style="ime-mode:active">
+        <span><%=memVo.getName() %></span>
     </div>
     <div>
         <label for="userid">회원ID</label>
-        <input type="text" name="userid" id="userid"
-        		style="ime-mode:inactive">&nbsp;
-        <input type="button" value="중복확인" id="btnChkId" title="새창열림">
+        <span><%= memVo.getUserid() %></span>
     </div>
     <div>
         <label for="pwd">비밀번호</label>
@@ -117,12 +173,12 @@
     <div>
         <label for="zipcode">주소</label>
         <input type="text" name="zipcode" id="zipcode" ReadOnly  
-        	title="우편번호" class="width_80">
+        	title="우편번호" class="width_80" value="<%= zipcode%>">
         <input type="Button" value="우편번호 찾기" id="btnZipcode" title="새창열림"><br />
         <span class="sp1">&nbsp;</span>
-        <input type="text" name="address" ReadOnly title="주소"  class="width_350"><br />
+        <input type="text" name="address" ReadOnly title="주소"  class="width_350"  value="<%= address%>"><br />
         <span class="sp1">&nbsp;</span>
-        <input type="text" name="addressDetail" title="상세주소"  class="width_350">
+        <input type="text" name="addressDetail" title="상세주소"  class="width_350"  value="<%= addressDetail%>">
     </div>
     <div>
         <label for="hp1">핸드폰</label>&nbsp;<select name="hp1" id="hp1" title="휴대폰 앞자리">
@@ -135,13 +191,13 @@
        	</select>
         -
         <input type="text" name="hp2" id="hp2" maxlength="4" title="휴대폰 가운데자리"
-        	class="width_80">-
+        	class="width_80" value="<%=hp2%>">-
         <input type="text" name="hp3" id="hp3" maxlength="4" title="휴대폰 뒷자리"
-        	class="width_80">
+        	class="width_80" value="<%=hp3%>">
     </div>
     <div>
         <label for="email1">이메일 주소</label>
-        <input type="text" name="email1"  id="email1" title="이메일주소 앞자리">@
+        <input type="text" name="email1"  id="email1" title="이메일주소 앞자리" value="<%=email1%>">@
         <select name="email2" id="email2"  title="이메일주소 뒷자리">
             <option value="naver.com">naver.com</option>
             <option value="hanmail.net">hanmail.net</option>
@@ -153,7 +209,7 @@
         	style="visibility:hidden;">
     </div>
     <div class="center">
-         <input type="submit" id="wr_submit" value="회원가입">
+         <input type="submit" id="wr_submit" value="정보수정">
     </div>
 </fieldset>
 
@@ -164,14 +220,3 @@
 </article>
 
 <%@ include file="../inc/bottom.jsp"%>
-
-
-
-
-
-
-
-
-
-
-

@@ -1,17 +1,23 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<%
+	String t_userid = (String)session.getAttribute("userid");
+	boolean isLogin = false;
+	if(t_userid != null && !t_userid.isEmpty()){
+		isLogin = true;
+	}
+%>
 <html lang="ko">
 <head>
 <meta charset="utf-8" />
-<title>herbmall</title>
+<title>Herb Mall</title>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/mainstyle.css"/>
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/clear.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/layout.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/mystyle.css"/>
 <script type="text/javascript" src="../js/jquery-3.5.1.min.js"></script>
 </head>
-
 <body>	
 	<!-- 상단 띠 이미지 영역-->
 	<div id="topImg" class="top_Img" style="background:url(<%=request.getContextPath()%>/images/bg_top1.PNG)  repeat-x">
@@ -23,9 +29,15 @@
 		<header id="header">
 			<h1><a href="<%=request.getContextPath()%>/index.jsp"><img alt="로고 이미지" src="<%=request.getContextPath()%>/images/herbLogo7.jpg" height="95px" /></a></h1>
 			<nav id="headerRight">
-				<ul class="views">					
+				<ul class="views">		
+				<%if(isLogin){%>
+					<li><a href="<%=request.getContextPath()%>/login/logout.jsp">로그아웃</a></li>
+					<li><a href="<%=request.getContextPath()%>/member/memberEdit.jsp">회원정보수정</a></li>
+					<li><a href="<%=request.getContextPath()%>/member/memberOut.jsp">회원탈퇴</a></li>
+				<%}else{%>
 					<li><a href="<%=request.getContextPath()%>/login/login.jsp">로그인</a></li>
-					<li><a href="<%=request.getContextPath()%>/member/agreement.jsp">회원가입</a></li>	            
+					<li><a href="<%=request.getContextPath()%>/member/agreement.jsp">회원가입</a></li>
+				<%}%>		            
 					<li><a href="<%=request.getContextPath()%>/shop/cart/cartList.jsp">장바구니</a></li>
 					<li><a href="<%=request.getContextPath()%>/shop/order/orderList.jsp">주문내역</a></li>
 					<li><a href="<%=request.getContextPath()%>/shop/mypage.jsp">마이페이지</a></li>

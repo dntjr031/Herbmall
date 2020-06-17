@@ -137,7 +137,7 @@
 	
 	<%if(firstPage > 1){ %>
 		<!-- 이전 블록이로 이동 ◀ -->
-		<a href="list.jsp?currentPage=<%= firstPage-1 %>">
+		<a href="list.jsp?currentPage=<%= firstPage-1 %>&searchCondition=<%=condition %>&searchKeyword=<%=keyword %>">
 			<img alt="이전 블록으로 이동" src="../images/first.JPG">
 		</a>
 	<%} %>
@@ -148,7 +148,7 @@
 		if(i > totalPage) break;
 	%>
 		<%if(i != currentPage){%>
-			<a href="list.jsp?currentPage=<%=i%>" >[<%=i %>]</a>
+			<a href="list.jsp?currentPage=<%=i%>&searchCondition=<%=condition %>&searchKeyword=<%=keyword %>" >[<%=i %>]</a>
 		<%}else{%>
 			<span style="color: blue; font-weight: bold;"><%= i %></span>
 		<%} //if %>
@@ -158,7 +158,7 @@
 	
 	<%if(lastPage < totalPage){ %>
 		<!-- 다음 블록이로 이동 ▶ -->
-		<a href="list.jsp?currentPage=<%= lastPage+1 %>">
+		<a href="list.jsp?currentPage=<%= lastPage+1 %>&searchCondition=<%=condition %>&searchKeyword=<%=keyword %>">
 			<img alt="다음 블록으로 이동" src="../images/last.JPG">
 		</a>
 	<%} %>

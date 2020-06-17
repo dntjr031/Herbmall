@@ -29,10 +29,9 @@
 		list = zipService.searchByDong(dong);
 		totalRecord = list.size();
 		pagingVo = new PagingVO(currentPage, totalRecord, pageSize, blockSize);
+	}else{
+		dong = "";
 	}
-	//2
-	
-	//3
 	
 %>
 <!DOCTYPE html>
@@ -56,14 +55,13 @@
 			}
 		});
 		
-		$(".box2 a").click(function() {
-			var zipcode = $(this).parent().parent().find("td:eq(0)").text();
-			$(opener.document).find("#zipcode").val(zipcode);
-			var address = $(this).text();
-			$(opener.document).find("#address").val(address);
-			self.close();
-		});
 	});
+	
+	function setZipcode(zipcode, address) {
+		$(opener.document).find("#zipcode").val(zipcode);
+		$(opener.document).find("input[name=address]").val(address);
+		self.close()
+	}
 </script>
 <style type="text/css">
 .box2{
@@ -83,7 +81,7 @@ label {
 	<h1>우편번호 검색</h1>
 	<form action="zipcode.jsp" name="frmZip" method="post">
 		<label for="dong">지역명</label>
-		<input type="text" id="dong" name="dong">
+		<input type="text" id="dong" name="dong" value="<%=dong%>">
 		<input type="submit" value="찾기">
 	</form>
 	<%
@@ -116,17 +114,18 @@ label {
 						String endbunji = vo.getEndbunji();
 						if(endbunji != null && !endbunji.isEmpty()){
 							bunji = " ( " + bunji;
-							bunji += " ~ ";
-							bunji += endbunji;
-							bunji += " ) ";
+							bunji += " ~ " + endbunji + " ) ";
 						}
 						
 						String address = vo.getSido() + " " + vo.getSido() + " "
-								+ vo.getGugun() + " " + vo.getDong() + " " + bunji;
+								+ vo.getGugun() + " " + vo.getDong();
 						%>
 						<tr>
 							<td><%=vo.getZipcode() %></td>
-							<td><a><%= address %></a></td>
+							<td>
+							<a href="#" onclick="setZipcode('<%=vo.getZipcode()%>','<%=address%>')">
+							<%= address  + " " + bunji %>
+							</a></td>
 						</tr>
 					<%}
 				}else{%>

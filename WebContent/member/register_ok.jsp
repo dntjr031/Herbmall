@@ -25,7 +25,7 @@
 	String hp3 = request.getParameter("hp3");
 	String email1 = request.getParameter("email1");
 	String email2 = request.getParameter("email2");
-	if("직접입력".equals(email2)){
+	if("etc".equals(email2)){
 		email2 = request.getParameter("email3");
 	}
 	String hp = "";
@@ -47,14 +47,15 @@
 	memVo.setAddressDetail(addressDetail);
 	memVo.setHp(hp);
 	memVo.setEmail(email);
-	
-	String msg = "", url = "";
+	System.out.println("ok vo=" + memVo);
+	String msg="회원가입 실패!", url="/member/register.jsp";
 	try{
 		int cnt = memService.insertMember(memVo);
 		
 		if(cnt > 0){
 			msg = "회원가입되었습니다.";
 			url = "/index.jsp";
+			
 		}
 	}catch(SQLException e){
 		e.printStackTrace();
