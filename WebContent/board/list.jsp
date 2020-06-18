@@ -64,9 +64,12 @@
 <link rel="stylesheet" type="text/css" href="../css/clear.css" />
 <link rel="stylesheet" type="text/css" href="../css/formLayout.css" />
 <link rel="stylesheet" type="text/css" href="../css/mystyle.css" />
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" type="text/javascript"></script>
 
 <script type="text/javascript">	
-
+	$(document).ready(function(){ 
+		$("#myTable").tablesorter({ sortList: [[0,0]] });
+	}); 
 </script>
 <style type="text/css">
 	body{
@@ -85,7 +88,7 @@
 	}
 %>
 <div class="divList">
-<table class="box2"
+<table id="myTable" class="tablesorter box2"
 	 	summary="기본 게시판에 관한 표로써, 번호, 제목, 작성자, 작성일, 조회수에 대한 정보를 제공합니다.">
 	<caption>기본 게시판</caption>
 	<colgroup>

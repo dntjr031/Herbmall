@@ -2,13 +2,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ include file="../inc/top.jsp" %>
+<%@ include file="../login/loginCheck.jsp" %>
 <jsp:useBean id="memVo" class="com.herbmall.member.model.MemberVO" scope="page"></jsp:useBean>
 <jsp:useBean id="memDAO" class="com.herbmall.member.model.MemberDAO" scope="session"></jsp:useBean>
 <%
 	// top.jsp 에서 회원정보수정을 누르면 get방식으로 이동 
 	// => http://localhost:9090/Herbmall/member/memberEdit.jsp
 	String c_userid = (String)session.getAttribute("userid");
-	String c_userName = (String)session.getAttribute("userName");
+	
+	
 	
 	try{
 		memVo = memDAO.selectMember(c_userid);
@@ -27,119 +29,46 @@
 	String email1 = "";
 	String email2 = "";
 	
-	if(address==null||address.isEmpty()){
+	if(address==null || address.isEmpty()){
 		address = "";
 	}
-	if(addressDetail==null||addressDetail.isEmpty()){
+	if(addressDetail==null || addressDetail.isEmpty()){
 		addressDetail = "";
 	}
-	if(zipcode==null||zipcode.isEmpty()){
+	if(zipcode==null || zipcode.isEmpty()){
 		zipcode = "";
 	}
-	if(hp!=null&&!hp.isEmpty()){
-		hp1 = hp.substring(0, hp.indexOf("-"));
+	if(hp!=null && !hp.isEmpty()){
+		/* hp1 = hp.substring(0, hp.indexOf("-"));
 		hp2 = hp.substring(hp.indexOf("-")+1, hp.lastIndexOf("-"));
-		hp3 = hp.substring(hp.lastIndexOf("-")+1);
+		hp3 = hp.substring(hp.lastIndexOf("-")+1); */
+		hp1 = hp.split("-")[0];
+		hp2 = hp.split("-")[1];
+		hp3 = hp.split("-")[2];
 	}
-	if(email!=null&&!email.isEmpty()){
-		email1 = email.substring(0, email.indexOf("@"));
-		email2 = email.substring(email.indexOf("@")+1);
+	if(email!=null && !email.isEmpty()){
+		email1 = email.split("@")[0];
+		email2 = email.split("@")[1];
 	}
-%>
-<script type="text/javascript">
-	$(function() {
-		$("#wr_submit").click(function() {
-			
-			if($("#name").val() == ''){
-				alert("이름을 입력해야 합니다.");
-				return false;
-			}else if($("#userid").val() == ''){
-				alert("회원ID를 입력해야 합니다.");
-				return false;
-			}else if($("#pwd").val() == ''){
-				alert("비밀번호를 입력해야 합니다.");
-				return false;
-			}else if(!validate_userid($("#userid").val())){
-				alert("아이디는 대소문자와 숫자, _ 만 올 수 있습니다.");
-				return false;
-			}else if(!validate_phone($("#hp2").val())){
-				alert("전화번호는 숫자만 올 수 있습니다.");
-				return false;
-			}else if(!validate_phone($("#hp3").val())){
-				alert("전화번호는 숫자만 올 수 있습니다.");
-				return false;
-			}else if($("#pwd").val() != $("#pwd2").val()){
-				alert("비밀번호가 일치하지 않습니다.");
-				return false;
-			}else if($("#chkId").val() != "Y"){
-				alert("중복확인을 해야합니다.");
-				return false;
+	
+	int counter = 0;
+	String[] emailList = {"naver.com","hanmail.net","nate.com","gmail.com"};
+	boolean isEtc = false;
+	if(email!=null && !email.isEmpty()){
+		for(int i = 0; i < emailList.length; i++){
+			if(emailList[i].equals(email2)){
+				counter++;
+				break;
 			}
-			
-			
-		});
-		
-		$("#email2").change(function() {
-			
-			$( "select option:selected" ).each(function() {
-			      var str = $( this ).text();
-			      if(str == "직접입력"){
-			    	  $("#email3").css("visibility","visible");
-			    	  $("#email3").val("");
-			    	  $("#email3").focus();
-			      }else{
-			    	  $("#email3").css("visibility","hidden");
-			    	  $("#email3").val("");
-			      }
-			    });
-		});
-		
-		$("#btnZipcode").click(function() {
-			var url = "<%=request.getContextPath()%>/zipcode/zipcode.jsp";
-            window.open(url, " _blank", "width=600,height=400,left=400,top=300,location=yes,resizable=yes"); 
-		});
-		
-		if('<%=hp%>' != ""){
-			$("#hp1 option").each(function() {
-				if($(this).text() == '<%=hp1%>'){
-					$(this).attr("selected","selected");
-				}
-			});
 		}
 		
-		if('<%=email%>' != ""){
-			$("#email2 option").each(function() {
-				if($(this).text() == '<%=email2%>'){
-					$(this).attr("selected","selected");
-				}else{
-					$("option[value=etc]").attr("selected","selected");
-					$("#email3").css("visibility","visible");
-					$("#email3").val('<%=email2%>');
-				}
-			});
+		if(counter == 0){
+			isEtc = true;
 		}
-	});
-	
-	function validate_userid(id) {
-		var pattern = new RegExp(/^[a-zA-Z0-9_]+$/g);
-		return pattern.test(id);
-		/* 정규식  /^[a-zA-Z0-9_]+$/g 
-		a에서 z 사이의 문자, A에서 Z사이의 문자, 0에서 9사이의 숫자나 _ 로 시작하거나 끝나야 한다는 의미
-		닫기 대괄호(]) 뒤의 + 기호는 이 패턴이 한 번 또는 그 이상 반복된다는 의미
-		*/ 
 	}
 	
-	function validate_phone(tel) {
-		var pattern = new RegExp(/^[0-9]*$/g);
-		return pattern.test(tel);
-		/* 정규식  /^[0-9]*$/g
-		0에서 9사이의 숫자로 시작하거나 끝나야 한다는 의미(^는 시작, $는 끝을 의미)
-		닫기 대괄호(]) 뒤의 * 기호는 0번 이상 반복
-		*/ 
-	}
-	
-	
-</script>
+%>
+<script type="text/javascript" src="../js/member.js"></script>
 
 <style type="text/css">
 	.width_80{
@@ -151,7 +80,7 @@
 </style>
 <article>
 <div class="divForm">
-<form name="frm1" method="post" action="register_ok.jsp">
+<form name="frm1" method="post" action="memberEdit_ok.jsp">
 <fieldset>
 	<legend>회원 정보 수정</legend>
     <div>        
@@ -182,12 +111,12 @@
     </div>
     <div>
         <label for="hp1">핸드폰</label>&nbsp;<select name="hp1" id="hp1" title="휴대폰 앞자리">
-            <option value="010">010</option>
-            <option value="011">011</option>
-            <option value="016">016</option>
-            <option value="017">017</option>
-            <option value="018">018</option>
-            <option value="019">019</option>
+            <option value="010"<%if(hp1.equals("010")){%> selected="selected" <%} %>>010</option>
+            <option value="011"<%if(hp1.equals("011")){%> selected="selected" <%} %>>011</option>
+            <option value="016"<%if(hp1.equals("016")){%> selected="selected" <%} %>>016</option>
+            <option value="017"<%if(hp1.equals("017")){%> selected="selected" <%} %>>017</option>
+            <option value="018"<%if(hp1.equals("018")){%> selected="selected" <%} %>>018</option>
+            <option value="019"<%if(hp1.equals("019")){%> selected="selected" <%} %>>019</option>
        	</select>
         -
         <input type="text" name="hp2" id="hp2" maxlength="4" title="휴대폰 가운데자리"
@@ -199,21 +128,31 @@
         <label for="email1">이메일 주소</label>
         <input type="text" name="email1"  id="email1" title="이메일주소 앞자리" value="<%=email1%>">@
         <select name="email2" id="email2"  title="이메일주소 뒷자리">
-            <option value="naver.com">naver.com</option>
-            <option value="hanmail.net">hanmail.net</option>
-            <option value="nate.com">nate.com</option>
-            <option value="gmail.com">gmail.com</option>
-            <option value="etc">직접입력</option>
+            <%-- <option value="naver.com"<%if(email2.equals("naver.com")){%> selected="selected" <%} %>>naver.com</option>
+            <option value="hanmail.net"<%if(email2.equals("hanmail.net")){%> selected="selected" <%} %>>hanmail.net</option>
+            <option value="nate.com"<%if(email2.equals("nate.com")){%> selected="selected" <%} %>>nate.com</option>
+            <option value="gmail.com"<%if(email2.equals("gmail.com")){%> selected="selected" <%} %>>gmail.com</option> --%>
+            <%for(int i = 0; i < emailList.length; i++){ %>
+	            <option value="<%=emailList[i] %>"
+	            <%if(email2.equals(emailList[i])){%> 
+	            selected="selected" <%} %>
+	            ><%=emailList[i] %></option>
+            <%} %>
+            <option value="etc"<%if(isEtc){%> selected="selected" <%} %>>직접입력</option>
         </select>
         <input type="text" name="email3" id="email3" title="직접입력인 경우 이메일주소 뒷자리"
-        	style="visibility:hidden;">
+        	<%if(isEtc){%> 
+        		style="visibility:visible;" value="<%=email2 %>" 
+        	<%}else{%> 
+        		style="visibility:hidden;" 
+        	<%} %>>
     </div>
     <div class="center">
          <input type="submit" id="wr_submit" value="정보수정">
     </div>
 </fieldset>
 
-    <input type ="hidden" name="chkId" id="chkId">
+    <input type ="hidden" name="chkId" id="chkId" value="Y">
         
 </form>
 </div>

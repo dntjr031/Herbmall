@@ -39,4 +39,12 @@ public class MemberService {
 	public MemberVO selectMember(String userid) throws SQLException {
 		return memberDao.selectMember(userid);
 	}
+	
+	public int updateMember(MemberVO vo) throws SQLException {
+		return memberDao.updateMember(vo);
+	}
+	
+	public int memberOut(String userid) throws SQLException {
+		return memberDao.memberOut(userid);
+	}
 }

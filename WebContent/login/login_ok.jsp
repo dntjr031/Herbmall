@@ -59,7 +59,7 @@
 		Cookie ck1 = new Cookie("ck_userid", userid);
 		ck1.setMaxAge(0); //쿠키 유효기간 : 0 => 쿠키 제거됨
 		ck1.setPath("/"); //지정한 경로와 하위 경로에 쿠키 전송
-		response.addCookie(ck1);
+		ck1.setPath("/");
 	}
 	%>
 	<jsp:forward page="../common/message.jsp"></jsp:forward>

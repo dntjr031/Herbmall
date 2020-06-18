@@ -84,7 +84,7 @@ public class MemberDAO {
 		try {
 			con = pool.getConnection();
 			
-			String sql = "select pwd from member where userid = ?";
+			String sql = "select pwd from member where userid = ? and outdate is null";
 			ps = con.prepareStatement(sql);
 			
 			ps.setString(1, userid);
@@ -102,7 +102,7 @@ public class MemberDAO {
 				result = MemberService.ID_NONE;
 			}
 			System.out.println("로그인 처리결과 result="+result +", 매개변수 userid="+userid
-					+ ", pwd=" + "pwd");
+					+ ", pwd=" + pwd);
 			return result;
 		} finally {
 			pool.dbClose(con, ps, rs);
@@ -144,6 +144,56 @@ public class MemberDAO {
 			return vo;
 		} finally {
 			pool.dbClose(con, ps, rs);
+		}
+	}
+	
+	public int updateMember(MemberVO vo) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		try {
+			con = pool.getConnection();
+			
+			String sql = "update member"
+					+ " set zipcode=?, address=?, addressdetail=?, hp=?, email=?"
+					+ " where userid=?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, vo.getZipcode());
+			ps.setString(2, vo.getAddress());
+			ps.setString(3, vo.getAddressDetail());
+			ps.setString(4, vo.getHp());
+			ps.setString(5, vo.getEmail());
+			ps.setString(6, vo.getUserid());
+			
+			int cnt = ps.executeUpdate();
+			System.out.println("수정결과 cnt=" + cnt + ", 매개변수 vo=" + vo);
+			return cnt;
+		} finally {
+			pool.dbClose(con, ps);
+		}
+	}
+	
+	public int memberOut(String userid) throws SQLException {
+		Connection con = null;
+		PreparedStatement ps = null;
+		
+		try {
+			con = pool.getConnection();
+			
+			String sql = "update member\r\n" + 
+					"set outdate = sysdate\r\n" + 
+					"where userid = ?";
+			ps = con.prepareStatement(sql);
+			
+			ps.setString(1, userid);
+			
+			int cnt = ps.executeUpdate();
+			
+			System.out.println("탈퇴결과 cnt=" + cnt + ", 매개변수 userid=" + userid);
+			return cnt;
+		} finally {
+			pool.dbClose(con, ps);
 		}
 	}
 }
