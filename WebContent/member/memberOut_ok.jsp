@@ -9,6 +9,7 @@
 <title>memberOut_ok.jsp</title>
 </head>
 <body>
+<%@include file="../login/loginCheck.jsp" %>
 <jsp:useBean id="memService" class="com.herbmall.member.model.MemberService" scope="session"></jsp:useBean>
 <%
 	// memberOut.jsp 에서 회원탈퇴를 누르면 post

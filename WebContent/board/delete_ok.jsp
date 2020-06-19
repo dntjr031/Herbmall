@@ -1,5 +1,5 @@
 <%@page import="java.sql.SQLException"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%
@@ -8,27 +8,29 @@
 	String no = request.getParameter("no");
 	String pwd = request.getParameter("pwd");
 	
-	if(no == null || no.isEmpty()){%>
+	if(no == null || no.isEmpty()){
+%>
 	<script type="text/javascript">
 		alert("잘못된 url입니다.");
 		location.href = "list.jsp";
 	</script>
-	<%	return;
-	}
-	
-	boardDAO dao = new boardDAO();
-	String check = "";
-	try{
-		check = dao.pwdByNo(Integer.parseInt(no));
-	}catch(SQLException e){
-		e.printStackTrace();
-	}
-	
-	int cnt = 0;
-	if(check.equals(pwd)){
-		cnt = dao.deleteByNo(Integer.parseInt(no));
-		if(cnt>0){
-			%>
+	<%
+		return;
+		}
+		
+		BoardDAO dao = new BoardDAO();
+		String check = "";
+		try{
+			check = dao.pwdByNo(Integer.parseInt(no));
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
+		
+		int cnt = 0;
+		if(check.equals(pwd)){
+			cnt = dao.deleteByNo(Integer.parseInt(no));
+			if(cnt>0){
+	%>
 			<script type="text/javascript">
 				alert("삭제 완료되었습니다.");
 				location.href = "list.jsp"

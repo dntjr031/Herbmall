@@ -3,21 +3,22 @@
 <%@page import="java.sql.SQLException"%>
 <%@page import="com.herbmall.board.model.BoardVo"%>
 <%@page import="java.util.List"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<jsp:useBean id="cservice" class="com.herbmall.comment.model.CommentService" scope="session"></jsp:useBean>
 <%
 	//[1] write_ok.jsp 에서 등록이 완료되면 get방식으로 이동
 	//[2] write.jsp 에서 [글목록]을 누르면 get방식으로 이동
 	//[3] list.jsp에서 [검색]버튼을 클릭하면 post방식으로 이동
 	//[4] list.jsp에서 페이지를 누르면 get방식으로 이동
-			
+	
 	request.setCharacterEncoding("utf-8");		
 	//1 
 	String condition = request.getParameter("searchCondition");
 	String keyword = request.getParameter("searchKeyword");
 	//2
-	boardDAO dao = new boardDAO();
+	BoardDAO dao = new BoardDAO();
 	List<BoardVo> list = null;
 	
 	try{
@@ -34,7 +35,7 @@
 	int currentPage = 1;
 	
 	if(request.getParameter("currentPage") != null 
-			&& !request.getParameter("currentPage").isEmpty()){
+	&& !request.getParameter("currentPage").isEmpty()){
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
 	}
 	
@@ -43,7 +44,7 @@
 	int totalRecord = list.size(); //전체 레코드 개수, 예) 17
 	int totalPage = (int)Math.ceil((float)totalRecord/pageSize);
 	// => 전체 페이지 개수
-			
+	
 	//현재 페이지를 이용하는 변수
 	int firstPage = currentPage - (currentPage-1)%blockSize;
 	// => 블럭의 시작 페이지 1,11,21...
@@ -53,6 +54,7 @@
 	// => ArrayList에서의 시작 인덱스 0, 5, 10,...
 	int num = totalRecord - curPos;
 	// => 페이지당 글 리스트 시작번호 17, 12, 7, 2
+			
 	
 %>
 <!DOCTYPE HTML>
@@ -122,7 +124,20 @@
 		<tr class="align_center">
 			<td><%= vo.getNo() %></td>
 			<td class="align_left">
-				<a href="countUpdate.jsp?no=<%= vo.getNo() %>"><%= vo.getTitle() %></a>
+				<a href="countUpdate.jsp?no=<%= vo.getNo() %>">
+					<%= vo.getTitle() %>
+					<%
+					try{
+						int count = cservice.selectCount(vo.getNo());
+						
+						if(count > 0){%>
+							[<%=count %>]
+						<%}
+					}catch(SQLException e){
+						e.printStackTrace();
+					}
+					%>
+				</a>
 			</td>
 			<td><%= vo.getName() %></td>
 			<td><%= sdf.format(vo.getRegdate()) %></td>

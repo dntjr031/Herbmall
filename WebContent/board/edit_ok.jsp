@@ -1,6 +1,6 @@
 <%@page import="com.herbmall.board.model.BoardVo"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
@@ -15,7 +15,7 @@
 	String content = request.getParameter("content");
 
 	//2
-	boardDAO dao = new boardDAO();
+	BoardDAO dao = new BoardDAO();
 	BoardVo vo = new BoardVo();
 	vo.setContent(content);
 	vo.setEmail(email);
@@ -32,7 +32,8 @@
 		e.printStackTrace();
 	}
 	//3
-	if(cnt>0){%>
+	if(cnt>0){
+%>
 		<script type="text/javascript">
 			alert('글 수정되었습니다.');
 			location.href = "detail.jsp?no=<%= no%>";

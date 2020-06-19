@@ -1,6 +1,6 @@
 <%@page import="com.herbmall.board.model.BoardVo"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%
@@ -9,35 +9,36 @@
 	//1
 	String no = request.getParameter("no");
 	
-	if(no.isEmpty() || no == null){%>
+	if(no.isEmpty() || no == null){
+%>
 	<script type="text/javacript">
 		alert("잘못된 url입니다.");
 		location.href="list.jsp";
 	</script>
-	<%return;
-}
-	//2
-	boardDAO dao = new boardDAO();
-	BoardVo vo = null;
-	try{
-		vo = dao.selectByNo(Integer.parseInt(no));
+	<%
+		return;
+			}
+		//2
+		BoardDAO dao = new BoardDAO();
+		BoardVo vo = null;
+		try{
+			vo = dao.selectByNo(Integer.parseInt(no));
+			
+		}catch(SQLException e){
+			e.printStackTrace();
+		}
 		
-	}catch(SQLException e){
-		e.printStackTrace();
-	}
-	
-	//3
-	String content = vo.getContent();
-	if(content == null || content.isEmpty()){
-		content = "";
-	}
-	
-	String email = vo.getEmail();
-	if(email == null || email.isEmpty()){
-		email = "";
-	}
-	
-%>
+		//3
+		String content = vo.getContent();
+		if(content == null || content.isEmpty()){
+			content = "";
+		}
+		
+		String email = vo.getEmail();
+		if(email == null || email.isEmpty()){
+			email = "";
+		}
+	%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>

@@ -1,5 +1,6 @@
 package com.herbmall.board.model;
 
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,10 +11,10 @@ import java.util.List;
 
 import com.herbmall.db.ConnectionPoolMgr;
 
-public class boardDAO {
+public class BoardDAO {
 	private ConnectionPoolMgr pool = null;
 
-	public boardDAO() {
+	public BoardDAO() {
 		pool = new ConnectionPoolMgr();
 	}
 
@@ -238,4 +239,50 @@ public class boardDAO {
 
 		}
 	}
+	
+	public List<BoardVo> selectNotice() throws SQLException {
+		/*
+		select a.* 
+		from(select NO, NAME, PWD, TITLE,
+		 EMAIL, REGDATE, READCOUNT, CONTENT 
+		 from board order by no desc) a
+		where rownum <7
+		 */
+		Connection con = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+
+		try {
+			con = pool.getConnection();
+
+			String sql = "select a.* " + 
+					" from(select NO, NAME, PWD, TITLE," + 
+					" EMAIL, REGDATE, READCOUNT, CONTENT " + 
+					" from board order by no desc) a" + 
+					" where rownum < 7";
+			ps = con.prepareStatement(sql);
+			
+			rs = ps.executeQuery();
+
+			List<BoardVo> list = new ArrayList<>();
+			while (rs.next()) {
+
+
+				BoardVo vo = new BoardVo( rs.getInt("no"), rs.getString("name"), 
+						rs.getString("pwd"), rs.getString("title"), rs.getString("email"), 
+						rs.getTimestamp("regdate"), rs.getInt("readcount"), 
+						rs.getString("content"));
+				
+				list.add(vo);
+			}
+
+			System.out.println("공지글 결과 list.size=" + list.size());
+			return list;
+
+		} finally {
+			pool.dbClose(con, ps, rs);
+		}
+	}
+	
+	
 }

@@ -1,7 +1,7 @@
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.herbmall.board.model.BoardVo"%>
 <%@page import="java.sql.SQLException"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="utf-8"%>
 <%
@@ -11,32 +11,34 @@
 	// 1.
 	String no = request.getParameter("no");
 	
-	if(no.isEmpty() || no == null){%>
+	if(no.isEmpty() || no == null){
+%>
 		<script type="text/javacript">
 			alert("잘못된 url입니다.");
 			location.href="list.jsp";
 		</script>
-		<%return;
-	}
-	// 2.
-	boardDAO dao = new boardDAO();
-	BoardVo vo = new BoardVo();
-	try{
-		vo = dao.selectByNo(Integer.parseInt(no));
-	}catch(SQLException e){
-		e.printStackTrace();
-	}
-	
-	// 3.
-	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	String content = vo.getContent();
-	if(content == null || content.isEmpty()){
-		content = "";
-	}else{
-		content = content.replace("\r\n", "<br>");
-	}
-	
-%>
+		<%
+			return;
+			}
+			// 2.
+			BoardDAO dao = new BoardDAO();
+			BoardVo vo = new BoardVo();
+			try{
+				vo = dao.selectByNo(Integer.parseInt(no));
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			
+			// 3.
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String content = vo.getContent();
+			if(content == null || content.isEmpty()){
+				content = "";
+			}else{
+				content = content.replace("\r\n", "<br>");
+			}
+			
+		%>
 <!DOCTYPE HTML>
 <html lang="ko">
 <head>
@@ -53,7 +55,34 @@
 	 }
 	.divForm {
 		width: 500px;
-		}
+	}
+	.comment{
+		overflow: hidden;
+		width: 500px;
+		margin-bottom: 5px;
+	}
+	.comment .c_name{
+		float: left;
+		display: inline-block;
+		margin-left: 30px;
+	}
+	.comment .c_pwd{
+		float: right;
+		display: inline-block;
+		margin-right: 30px;
+	}
+	form[name=frm]{
+		border: 1px solid gray;
+		width: 500px;
+		padding: 5px;
+		text-align: right;
+	}
+	form[name=frm] input[type=submit]{
+		margin-right: 
+	}
+	.content{
+		text-align: center;
+	}
 </style>  
 </head>
 <body>
@@ -79,8 +108,11 @@
         	<a href='delete.jsp?no=<%= vo.getNo()%>'>삭제</a> |
         	<a href='list.jsp'>목록</a>			
 		</div>
+		<hr>
 	</div>
-
+	<%request.setAttribute("bdno", no); %>
+	<jsp:include page="commentList.jsp"></jsp:include>
+	<jsp:include page="comment.jsp"></jsp:include>
 	
 </body>
 </html>

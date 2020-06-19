@@ -1,5 +1,5 @@
 <%@page import="java.sql.SQLException"%>
-<%@page import="com.herbmall.board.model.boardDAO"%>
+<%@page import="com.herbmall.board.model.BoardDAO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,27 +17,30 @@
 	
 	//1
 	String no = request.getParameter("no");
-	if(no == null || no.isEmpty()){%>
+	if(no == null || no.isEmpty()){
+%>
 		<script type="text/javascript">
 			alert('잘못된 url입니다.');
 			location.href = 'list.jsp';
 		</script>
-		<%return;
-	}
-	//2
-	boardDAO dao = new boardDAO();
-	int cnt = 0;
-	try{
-		cnt = dao.updateReadCount(Integer.parseInt(no));
-	}catch(SQLException e){
-		e.printStackTrace();
-	}
-	//3
-	
-	if(cnt>0){
-		System.out.println("조회수 증가 성공");
-		response.sendRedirect("detail.jsp?no=" + no);
-	}else{%>
+		<%
+			return;
+			}
+			//2
+			BoardDAO dao = new BoardDAO();
+			int cnt = 0;
+			try{
+				cnt = dao.updateReadCount(Integer.parseInt(no));
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			//3
+			
+			if(cnt>0){
+				System.out.println("조회수 증가 성공");
+				response.sendRedirect("detail.jsp?no=" + no);
+			}else{
+		%>
 		<script type="text/javascript">
 			alert("조회수 증가 실패");
 			history.back();
