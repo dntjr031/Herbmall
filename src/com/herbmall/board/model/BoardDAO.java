@@ -8,14 +8,13 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.herbmall.db.ConnectionPoolMgr;
+import com.herbmall.db.ConnectionPoolMgr2;
 
 public class BoardDAO {
-	private ConnectionPoolMgr pool = null;
+	private ConnectionPoolMgr2 pool = null;
 
 	public BoardDAO() {
-		pool = new ConnectionPoolMgr();
+		pool = ConnectionPoolMgr2.getInstance();
 	}
 
 	public int insertBoard(BoardVo vo) throws SQLException {
