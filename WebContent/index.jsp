@@ -5,7 +5,7 @@
 	<img alt="herb" src="./images/herb.JPG">
 </article>
 <article id="rightCon">
-	<%@include file="./inc/mainNotice.jsp" %>
+	<%@include file="./common/mainNotice.jsp" %>
 </article>
 <article id="listCon">
 	<h2>상품 목록</h2>
